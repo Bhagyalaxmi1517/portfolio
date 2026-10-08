@@ -1,36 +1,145 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Portfolio
 
-## Getting Started
+A modern, clean and professional personal portfolio website built with **Next.js**, **TypeScript** and **Tailwind CSS**.
 
-First, run the development server:
+It ships as a single, fast, fully static page with every section a recruiter or client usually looks for:
+
+| Section | Purpose |
+| --- | --- |
+| Hero / Introduction | Name, headline, call-to-action and social links |
+| About Me | Short biography and quick facts |
+| Professional Experience | Timeline of roles and achievements |
+| Skills | Grouped technical skills |
+| Projects | Project cards with source and live links |
+| Certifications & Training | Credentials with verification links |
+| Education | Academic background |
+| Achievements | Awards, recognitions and milestones |
+| Contact | Email, GitHub, LinkedIn, location and résumé |
+| Footer | Navigation, GitHub and LinkedIn links |
+
+## ✨ Features
+
+- **Responsive** — mobile-first layout with a collapsible navigation menu.
+- **Fast** — fully static output, self-hosted fonts, no client-side data fetching.
+- **Accessible** — semantic landmarks, skip-to-content link, visible focus states, `aria` labelling, and full support for `prefers-reduced-motion`.
+- **Polished** — subtle scroll-reveal animations, sticky blurred header with scroll-spy navigation, and a light/dark theme toggle that remembers your choice.
+- **SEO ready** — metadata, Open Graph and Twitter cards, `sitemap.xml`, `robots.txt` and `Person` JSON-LD structured data.
+- **Easy to maintain** — all content lives in one file; components are small and modular.
+
+## 🧰 Tech stack
+
+- [Next.js 16](https://nextjs.org/) (App Router, Cache Components, Turbopack)
+- [React 19](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS 4](https://tailwindcss.com/)
+- ESLint (`eslint-config-next`)
+
+## 🚀 Getting started
 
 ```bash
+# 1. Install dependencies
+npm install
+
+# 2. Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# → http://localhost:3000
+
+# 3. Production build
+npm run build
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✏️ Customising your content
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Everything you need to edit is in [`src/data/portfolio.ts`](src/data/portfolio.ts).**
+The components never hard-code copy, links or dates.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Replace the placeholder values (`Your Name`, `you@example.com`, `your-username`, `example.com`, …).
+2. Add, remove or reorder entries in `experience`, `projects`, `skillGroups`, `certifications`, `education` and `achievements`.
+3. Adjust `sections` if you want to change the navigation order or labels — the header, footer and scroll-spy all read from it.
 
-## Learn More
+> ⚠️ Every value in `src/data/portfolio.ts` is a **placeholder**. None of it is real personal information — replace it before deploying.
 
-To learn more about Next.js, take a look at the following resources:
+Other small tweaks:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| What | Where |
+| --- | --- |
+| Accent colour, card/chip/button styles, animations | `src/app/globals.css` |
+| Site title, description, Open Graph tags | `src/app/layout.tsx` (imports copy from `portfolio.ts`) |
+| Résumé download link | `site.resumeUrl` — drop a PDF in `public/` (default: `public/resume.pdf`) |
+| Favicon | `src/app/favicon.ico` |
+| Section order on the page | `src/app/page.tsx` |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Environment variables
 
-## Deploy on Vercel
+Create a `.env.local` file (or set it in your hosting provider):
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This absolute URL is used for `sitemap.xml`, `robots.txt`, canonical links and social previews.
+It defaults to `https://example.com` when unset.
+
+## 📁 Project structure
+
+```
+src/
+├── app/
+│   ├── layout.tsx          # Root layout: fonts, metadata, header/footer, theme script
+│   ├── page.tsx            # Single page that composes all sections (+ JSON-LD)
+│   ├── globals.css         # Tailwind v4 theme, design tokens, reveal animation
+│   ├── robots.ts           # /robots.txt
+│   └── sitemap.ts          # /sitemap.xml
+├── components/
+│   ├── Header.tsx          # Sticky nav with scroll spy + mobile menu
+│   ├── ThemeToggle.tsx     # Light/dark switch
+│   ├── Footer.tsx
+│   ├── sections/           # One component per page section
+│   │   ├── Hero.tsx  About.tsx  Experience.tsx  Skills.tsx
+│   │   ├── Projects.tsx  Certifications.tsx  Education.tsx
+│   │   └── Achievements.tsx  Contact.tsx
+│   └── ui/
+│       ├── Section.tsx     # Shared section shell (id, heading, description)
+│       ├── Reveal.tsx      # Scroll-reveal wrapper
+│       └── icons.tsx       # Inline SVG icons (no icon dependency)
+└── data/
+    └── portfolio.ts        # ← all of your content lives here
+```
+
+## 🌗 Theme & animations
+
+- The theme is applied **before first paint** by a tiny inline script in `layout.tsx`, so there is no flash of the wrong theme. The choice is stored in `localStorage` under `theme`.
+- Scroll-reveal animations only hide content when JavaScript is available (`.js` class) and are disabled entirely for users who prefer reduced motion — the page stays fully readable in both cases.
+
+## ♿ Accessibility notes
+
+- One `<h1>` per page and a consistent heading hierarchy; each section is labelled by its heading.
+- Skip-to-content link, landmarks (`header`, `main`, `nav`, `footer`), and `aria-current` on the active nav item.
+- Icon-only buttons and links carry `aria-label`s; decorative SVGs are `aria-hidden`.
+- Colour contrast meets WCAG AA in both themes.
+
+## ▲ Deploying
+
+### Vercel (recommended)
+
+1. Push this repository to GitHub.
+2. Import it at [vercel.com/new](https://vercel.com/new) — the framework is detected automatically.
+3. Add `NEXT_PUBLIC_SITE_URL` under *Settings → Environment Variables* (e.g. `https://your-domain.com`).
+4. Deploy.
+
+### Anywhere else
+
+```bash
+npm run build   # outputs an optimized production build
+npm start       # serves it
+```
+
+## 📜 Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm start` | Serve the production build |
+| `npm run lint` | Run ESLint |
