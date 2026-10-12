@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useLayoutEffect, useSyncExternalStore } from "react";
 import { MoonIcon, SunIcon } from "@/components/ui/icons";
 
 /**
@@ -41,6 +41,24 @@ function toggleTheme() {
 
 export default function ThemeToggle() {
   const isDark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+
+  // The inline script in the root layout applies the stored (or system) theme
+  // to <html> before paint. React's dev-only Strict Mode remount resets the
+  // JSX-managed `<html>` class attribute and clears it, so re-apply the same
+  // logic here. This is a no-op in production.
+  useLayoutEffect(() => {
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem("theme");
+    } catch {
+      /* storage may be unavailable (private mode) — fall back to system */
+    }
+    const dark = stored
+      ? stored === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.classList.toggle("dark", dark);
+  }, []);
+
   const label = isDark ? "Switch to light theme" : "Switch to dark theme";
 
   return (

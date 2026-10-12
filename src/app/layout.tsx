@@ -62,7 +62,13 @@ if(d)c.add("dark");
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable}`}
+      // The bootstrap script below adds `js` / `dark` to <html> before hydration.
+      // Tell React to accept the DOM instead of reporting a class-name mismatch.
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootstrapScript }} />
       </head>
