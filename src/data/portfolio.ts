@@ -11,7 +11,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
 
 export const site = {
   /** Used for <title>, Open Graph, JSON-LD and the footer. */
-  name: "Your Name",
+  name: "Bhagyalaxmi",
   /** Short professional headline shown in the hero, metadata and footer. */
   headline: "Your Professional Headline",
   /** Sentence used for meta description / social previews. */
@@ -49,7 +49,7 @@ export const hero = {
   subheadline: "I build reliable, accessible and thoughtfully designed software.",
   /** Longer introduction paragraph. */
   intro:
-    "Replace this with two or three sentences about who you are, what you work on, and the kind of problems you enjoy solving.",
+    "Iam Developer in T-SPARK, Telangana Police Department, enjoy to learn the new tech and things.",
   primaryCta: { label: "Get in touch", href: "#contact" },
   secondaryCta: { label: "View projects", href: "#projects" },
 } as const;
@@ -151,7 +151,7 @@ export const skillGroups: SkillGroup[] = [
   {
     id: "tools",
     title: "Tools & Platforms",
-    items: ["Git", "GitHub", "Docker", "Vercel", "AWS"],
+    items: ["Git", "GitHub", "Vercel", "AWS"],
   },
   {
     id: "practices",
